@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ທົດສອບເປີດແອັບ BCEL One</title>
+    <style>
+        body {
+            font-family: 'Phetsarath OT', sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .pay-btn {
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h3>ຄອດຕິວ ມສ ເທັ່ງ ຟີຊິກ ມ.7-VIP</h3>
+        <p style="color: #2563eb; font-weight: bold;">ຄ່າຮຽນ: 500,000 ກີບ/ເທີມ</p>
+        
+        <!-- ປຸ່ມທົດສອບ -->
+        <button class="pay-btn" onclick="openBCEL()">
+            💳 ຊຳລະຜ່ານ BCEL One
+        </button>
+    </div>
+
+    <script>
+        function openBCEL() {
+            // ຄຳສັ່ງຮຽກແອັບ BCEL One
+            window.location.href = "bcelone://";
+
+            // ຖ້າໃນເຄື່ອງບໍ່ມີແອັບ ມັນຈະແຈ້ງເຕືອນຫຼັງຈາກ 2 ວິນາທີ
+            setTimeout(function() {
+                alert("ຖ້າແອັບບໍ່ເປີດຂຶ້ນມາ ສະແດງວ່າໃນມືຖືເຄື່ອງນີ້ຍັງບໍ່ໄດ້ຕິດຕັ້ງແອັບ BCEL One");
+            }, 2000);
+        }
+    </script>
+
+</body>
+</html>
