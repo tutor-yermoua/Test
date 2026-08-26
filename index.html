@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Registration</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="form-container">
+        <div class="form-header">
+            <div class="logo-container">
+                <img src="Logo/Logo.jpg" alt="YMK Logo" class="logo-img">
+            </div>
+            <h2>ລົງທະບຽນຮຽນເພີ່ມອອນໄລນ໌</h2>
+            <p>ຕິວເຕີ້ເຢີມົວ • ສອນເພີ່ມກຽມນັກຮຽນເກັ່ງ</p>
+        </div>
+
+        <form id="registrationForm" action="next_page.php" method="POST">
+            
+            <!-- ================= PAGE 1 ================= -->
+            <div class="form-page" id="page-1">
+                <div class="section-title">
+                    <span class="icon-box icon-personal"><i class="fa-solid fa-user"></i></span> ຂໍ້ມູນສ່ວນຕົວ
+                </div>
+                
+                <!-- ຊື່: ເຊື່ອງປ້າຍຊື່ໄວ້, ສະແດງຕອນກົດ -->
+                <div class="input-group-box">
+                    <span class="floating-label">ຊື່ ແລະ ນາມສະກຸນ</span>
+                    <div class="input-field">
+                        <i class="fa-solid fa-user icon"></i>
+                        <input type="text" name="fullname" placeholder="ຊື່ ແລະ ນາມສະກຸນ" onfocus="this.placeholder='ປ້ອນຊື່ ແລະ ນາມສະກຸນ'" onblur="this.placeholder='ຊື່ ແລະ ນາມສະກຸນ'" required>
+                    </div>
+                </div>
+
+                <!-- ໂຮງຮຽນ: ເຊື່ອງປ້າຍຊື່ໄວ້, ສະແດງຕອນກົດ -->
+                <div class="input-group-box">
+                    <span class="floating-label">ໂຮງຮຽນ</span>
+                    <div class="input-field">
+                        <i class="fa-solid fa-school icon"></i>
+                        <input type="text" name="school" placeholder="ໂຮງຮຽນ" onfocus="this.placeholder='ປ້ອນຊື່ໂຮງຮຽນ'" onblur="this.placeholder='ໂຮງຮຽນ'" required>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <span class="icon-box icon-address"><i class="fa-solid fa-location-dot"></i></span> ທີ່ຢູ່ປັດຈຸບັນ
+                </div>
+                            
+              <!-- 1. ແຂວງ: ສະແດງປ້າຍຊື່ຄ້າງໄວ້ຕະຫຼອດ -->
+                <div class="input-group-box always-show">
+                    <span class="floating-label">ແຂວງ</span>
+                    <div class="input-field select-wrapper custom-dropdown">
+                        <!-- ປຸ່ມກ່ອງທີ່ຈະສະແດງຄຳວ່າ ກະລຸນາເລືອກແຂວງ -->
+                        <div id="provinceSelectBox" class="select-box-custom" onclick="toggleDropdown('provinceList')">
+                            <span id="provinceSelectedText">----- ກະລຸນາເລືອກແຂວງ -----</span>
+                        </div>
+                        <!-- ກ່ອງລາຍການທີ່ຈະເດັ້ງຂຶ້ນມາຕອນກົດ -->
+                        <ul id="provinceList" class="dropdown-list" style="display: none;"></ul>
+                        <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+                    </div>
+                </div>
+              <!-- 2. ເມືອງ: ສະແດງປ້າຍຊື່ຄ້າງໄວ້ຕະຫຼອດ -->
+                <div class="input-group-box always-show" style="margin-bottom: 18px;">
+                    <span class="floating-label">ເມືອງ</span>
+                    <div class="input-field select-wrapper custom-dropdown">
+                        <!-- ປຸ່ມກ່ອງທີ່ຈະສະແດງຄຳວ່າ ກະລຸນາເລືອກເມືອງ -->
+                        <div id="districtSelectBox" class="select-box-custom" onclick="toggleDropdown('districtList')">
+                            <span id="districtSelectedText">----- ກະລຸນາເລືອກເມືອງ -----</span>
+                        </div>
+                        <!-- ກ່ອງລາຍການທີ່ຈະເດັ້ງຂຶ້ນມາຕອນກົດ -->
+                        <ul id="districtList" class="dropdown-list" style="display: none;"></ul>
+                        <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+                    </div>
+                </div>
+                <div class="section-title">
+                    <span class="icon-box icon-contact"><i class="fa-solid fa-comments"></i></span> ຊ່ອງທາງການຕິດຕໍ່
+                </div>
+                <!-- WhatsApp: ເຊື່ອງປ້າຍຊື່ໄວ້, ສະແດງຕອນກົດ -->
+                <div class="input-group-box">
+                    <span class="floating-label">ເບີ WhatsApp</span>
+                    <div class="input-field">
+                        <i class="fa-brands fa-whatsapp icon"></i>
+                        <input type="text" name="whatsapp" placeholder="ເບີ WhatsApp" onfocus="this.placeholder='ປ້ອນເບີ WhatsApp'" onblur="this.placeholder='ເບີ WhatsApp'" required>
+                    </div>
+                </div>
+
+                <!-- Facebook: ເຊື່ອງປ້າຍຊື່ໄວ້, ສະແດງຕອນກົດ -->
+                <div class="input-group-box">
+                    <span class="floating-label">Facebook</span>
+                    <div class="input-field">
+                        <i class="fa-brands fa-facebook icon"></i>
+                        <input type="text" name="facebook" placeholder="ຊື່ Facebook" onfocus="this.placeholder='ປ້ອນຊື່ Facebook'" onblur="this.placeholder='ຊື່ Facebook'" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-next"><i class="fa-solid fa-arrow-right"></i> ຕໍ່ໄປ</button>
+            </div>
+        <!-- ================= ໜ້າທີ 2: ເລືອກວິຊາ ແລະ ສະຫຼຸບ ================= -->
+        <div id="step2Container" class="step-page" style="display: none;">
+            <div class="form-header-banner">
+                <div class="back-btn-absolute" id="backToStep1">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </div>
+                <div class="banner-logo">
+                    <img src="https://i.imgur.com/7bQ4x5G.png" alt="Logo" onerror="this.src='https://via.placeholder.com/80'">
+                </div>
+                <h2>ລົງທະບຽນຮຽນອອນໄລ໌</h2>
+                <p>ຕິວເຕີເຍົົວ • ສອນເພີ່ມກຮຽນມັກຮຽນເກັ່ງ</p>
+            </div>
+
+            <div class="form-content">
+                <div class="form-title">
+                    <h3>ເລືອກວິຊາຮຽນ</h3>
+                    <p>ເລືອກວິຊາ ແລະ ຊັ້ນຮຽນ/ລະດັບທີ່ທ່ານສົນໃຈ</p>
+                </div>
+
+                <!-- ປຸ່ມກອງປະເພດວິຊາ ທີ່ມີການສະຫຼັບເຄື່ອງໝາຍຕິກ -->
+                <div class="filter-row" id="mainFilter">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fa-solid fa-check"></i> ທັງໝົດ
+                    </button>
+                    <button class="filter-btn" data-filter="calc">
+                        <i class="fa-solid fa-check" style="display: none;"></i> ສາຍຄິດໄລ່
+                    </button>
+                    <button class="filter-btn" data-filter="lang">
+                        <i class="fa-solid fa-check" style="display: none;"></i> ສາຍພາສາ
+                    </button>
+                </div>
+
+                <div class="filter-row" id="subFilter">
+                    <button class="sub-btn active" data-sub="math" data-cat="calc">
+                        ຄະນິດສາດ <span class="count-badge" style="display:none;">0</span>
+                    </button>
+                    <button class="sub-btn" data-sub="physics" data-cat="calc">
+                        ຟິຊິກສາດ <span class="count-badge" style="display:none;">0</span>
+                    </button>
+                    <button class="sub-btn" data-sub="chemistry" data-cat="calc">
+                        ເຄມີສາດ <span class="count-badge" style="display:none;">0</span>
+                    </button>
+                    <button class="sub-btn" data-sub="chinese" data-cat="lang">
+                        ພາສາຈີນ <span class="count-badge" style="display:none;">0</span>
+                    </button>
+                    <button class="sub-btn" data-sub="english" data-cat="lang">
+                        ພາສາອັງກິດ <span class="count-badge" style="display:none;">0</span>
+                    </button>
+                </div>
+
+                <div class="course-list">
+                    <!-- ວິຊາທີ 1 -->
+                    <div class="course-card" data-cat="calc" data-sub="math" data-name="ຄອສຕິວ ນຮ ເກັ່ງ ຄະນິດສາດ ມ.7" data-price="599000" data-time="18:00 - 19:30" data-days="ຈັນ-ພຸດ-ສຸກ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ຄອສຕິວ ນຮ ເກັ່ງ ຄະນິດສາດ ມ.7</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">ມ.7</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 599,000 ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i> ເວລາຮຽນ: 18:00 - 19:30ໂມງ</span>
+                                
+                            </div>
+                            <div class="c-details-grid">
+                                
+                                <span><i class="fa-regular fa-calendar"></i> ຮຽນ: ຈັນ-ພຸດ-ສຸກ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-calc">ສາຍຄິດໄລ່</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ວິຊາທີ 2 -->
+                    <div class="course-card" data-cat="calc" data-sub="math" data-name="ຄອສຕິວ ນຮ ເກັ່ງ ຄະນິດສາດ ມ.4" data-price="599000" data-time="20:10 - 21:10" data-days="ອັງຄານ-ພະຫັດ-ເສົາ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ຄອສຕິວ ນຮ ເກັ່ງ ຄະນິດສາດ ມ.4</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">ມ.4</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 599,000 ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i> ເວລາຮຽນ: 20:10 - 21:10ໂມງ</span>
+                               
+                            </div>
+                             <div class="c-details-grid">
+                               
+                                <span><i class="fa-regular fa-calendar"></i> ຮຽນ: ອັງຄານ-ພະຫັດ-ເສົາ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-calc">ສາຍຄິດໄລ່</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ວິຊາທີ 3 -->
+                    <div class="course-card" data-cat="calc" data-sub="physics" data-name="ຄອສຕິວ ນຮ ເກັ່ງ ຟິຊິກສາດ ມ.7" data-price="500000" data-time="20:15-21:15" data-days="ຈັນ-ພຸດ-ສຸກ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ຄອສຕິວ ນຮ ເກັ່ງ ຟີຊິກສາດ ມ.7</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">ມ.7</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 500,000ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i>ເວລາຮຽນ: 20:15-21:15ໂມງ</span>
+                                
+                            </div>
+                            <div class="c-details-grid">
+                                
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ຈັນ-ພຸດ-ສຸກ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-calc">ສາຍຄິດໄລ່</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>     
+                    <!-- ວິຊາທີ 4 -->
+                    <div class="course-card" data-cat="calc" data-sub="physics" data-name="ຄອສຕິວ ນຮ ເກັ່ງ ຟິຊິກ ມ.7-VIP" data-price="500000" data-time="20:15-21:15" data-days="ອັງຄານ-ພະຫັດ-ເສົາ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ຄອສຕິວ ນຮ ເກັ່ງ ຟີຊິກ ມ.7-VIP</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">ມ.7-VIP</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 500,000ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i>ເວລາຮຽນ: 20:15-21:15ໂມງ</span>
+                                
+                            </div>
+                            <div class="c-details-grid">
+                                
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ອັງຄານ-ພະຫັດ-ເສົາ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-calc">ສາຍຄິດໄລ່</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ວິຊາທີ 5 -->
+                    <div class="course-card" data-cat="calc" data-sub="physics" data-name="ຄອສຕິວ ນຮ ເກັ່ງ ຟິຊິກ ມ.5+6" data-price="500000" data-time="19:00-20:00" data-days="ອັງຄານ-ພະຫັດ-ເສົາ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ຄອສຕິວ ນຮ ເກັ່ງ ຟີຊິກ ມ.5+6</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">ມ.5+6</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 500,000ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i>ເວລາຮຽນ: 19:00-20:00ໂມງ</span>                 
+                            </div>
+                            <div class="c-details-grid">                               
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ອັງຄານ-ພະຫັດ-ເສົາ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-calc">ສາຍຄິດໄລ່</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ວິຊາທີ 6 -->
+                    <div class="course-card" data-cat="calc" data-sub="physics" data-name="ຄອສຕິວ ນຮ ເກັ່ງ ຟິຊິກສາດ ມ.4" data-price="500000" data-time="19:00-20:00" data-days="ຈັນ-ພຸດ-ສຸກ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ຄອສຕິວ ນຮ ເກັ່ງ ຟີຊິກສາດ ມ.4</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">ມ.4</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 500,000ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i>ເວລາຮຽນ: 19:00-20:00ໂມງ</span>                 
+                            </div>
+                            <div class="c-details-grid">                               
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ຈັນ-ພຸດ-ສຸກ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-calc">ສາຍຄິດໄລ່</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ວິຊາທີ 7 -->
+                    <div class="course-card" data-cat="calc" data-sub="physics" data-name="ຄອສກຽມເສັງທຶນ MEXT" data-price="799000" data-time="17:00-18:00" data-days="ວັນເສົາ-ວັນອາທິດ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ຄອສກຽມເສັງທຶນ MEXT</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">MEXT</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 799,000ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i>ເວລາຮຽນ: 17:00-18:00ໂມງ</span>                 
+                            </div>
+                            <div class="c-details-grid">                               
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ເສົາ-ທິດ </span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-calc">ສາຍຄິດໄລ່</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                      <!-- ວິຊາທີ 8 -->
+                    <div class="course-card" data-cat="calc" data-sub="chemistry" data-name="ຄອສຕິວ ນຮ ເກັ່ງ ເຄມີສາດ ມ.7" data-price="500000" data-time="19:00-20:00" data-days="ຈັນ-ພຸດ-ສຸກ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ຄອສຕິວ ນຮ ເກັ່ງ ເຄມີສາດ ມ.7</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">ມ.7</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 500,000 ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i>ເວລາຮຽນ: 19:00-20:00ໂມງ</span>                 
+                            </div>
+                            <div class="c-details-grid">                               
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ຈັນ-ພຸດ-ສຸກ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-calc">ສາຍຄິດໄລ່</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ວິຊາທີ 9 -->
+                    <div class="course-card" data-cat="calc" data-sub="chemistry" data-name="ຄອສຕິວ ນຮ ເກັ່ງ ເຄມີສາດ ມ.4" data-price="500000" data-time="19:00-20:00" data-days="ອັງຄານ-ພະຫັດ-ເສົາ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ຄອສຕິວ ນຮ ເກັ່ງ ເຄມີສາດ ມ.4</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">ມ.4</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 500,000 ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i>ເວລາຮຽນ: 19:00-20:00ໂມງ</span>                 
+                            </div>
+                            <div class="c-details-grid">                               
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ອັງຄານ-ພະຫັດ-ເສົາ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-calc">ສາຍຄິດໄລ່</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ວິຊາທີ 10-->
+                    <div class="course-card" data-cat="lang" data-sub="chinese" data-name="ພາສາຈີນ-HSK1" data-price="1650000" data-time="17:00 - 18:30" data-days="ຈັນ-ພຸດ-ສຸກ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ພາສາຈີນ-HSK1</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">HSK1</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 1,650,000 ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i> ເວລາຮຽນ:17:00 - 18:30</span>
+                                
+                            </div>
+                             <div class="c-details-grid">
+                                
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ຈັນ-ພຸດ-ສຸກ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-lang">ສາຍພາສາ</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ວິຊາທີ 11 -->
+                    <div class="course-card" data-cat="lang" data-sub="chinese" data-name="ພາສາຈີນ-HSK2" data-price="1650000" data-time="18:00-19:30" data-days="ຈັນ-ພຸດ-ສຸກ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ພາສາຈີນ-HSK2</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">HSK2</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 1,650,000 ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i> ເວລາຮຽນ:18:00 - 19:30</span>
+                                
+                            </div>
+                             <div class="c-details-grid">
+                                
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ຈັນ-ພຸດ-ສຸກ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-lang">ສາຍພາສາ</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                   <!-- ວິຊາທີ 12 -->
+                    <div class="course-card" data-cat="lang" data-sub="chinese" data-name="ພາສາຈີນ-HSK3" data-price="1650000" data-time="17:00 - 18:30" data-days="ຈັນ-ພຸດ-ສຸກ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ພາສາຈີນ-HSK3</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">HSK3</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 1,650,000 ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i> ເວລາຮຽນ:17:00-18:30 ໂມງ</span>
+                                
+                            </div>
+                             <div class="c-details-grid">
+                                
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ຈັນ-ພຸດ-ສຸກ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-lang">ສາຍພາສາ</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ວິຊາທີ 13 -->
+                    <div class="course-card" data-cat="lang" data-sub="chinese" data-name="ພາສາຈີນ-HSK4" data-price="1650000" data-time="18:00 - 19:30" data-days="ອັງຄານ-ພະຫັດ-ເສົາ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ພາສາຈີນ-HSK4</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">HSK4</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 1,650,000 ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i> ເວລາຮຽນ:18:00 - 19:30ໂມງ</span>
+                                
+                            </div>
+                             <div class="c-details-grid">
+                                
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ອັງຄານ-ພະຫັດ-ເສົາ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-lang">ສາຍພາສາ</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ວິຊາທີ 14 -->
+                    <div class="course-card" data-cat="lang" data-sub="english" data-name="ພາສາອັງກິດ-ລະດັບເລີ່ມຕົ້ນ" data-price="1650000" data-time="17:00 - 18:30" data-days="ຈັນ-ພຸດ-ສຸກ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ພາສາອັງກິດ-ລະດັບເລີ່ມຕົ້ນ</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">ລະດັບເລີ່ມຕົ້ນ</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 1,650,000 ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i> ເວລາຮຽນ:17:00-18:30ໂມງ</span>
+                                
+                            </div>
+                             <div class="c-details-grid">
+                                
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ຈັນ-ພຸດ-ສຸກ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-lang">ສາຍພາສາ</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ວິຊາທີ 15 -->
+                    <div class="course-card" data-cat="lang" data-sub="english" data-name="ພາສາອັງກິດ-ລະດັບກາງ" data-price="1650000" data-time="17:00 - 18:30" data-days="ຈັນ-ພຸດ-ສຸກ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ພາສາອັງກິດ-ລະດັບກາງ</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">ລະດັບກາງ</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 1,650,000 ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i> ເວລາຮຽນ:17:00-18:30ໂມງ</span>
+                                
+                            </div>
+                             <div class="c-details-grid">
+                                
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ຈັນ-ພຸດ-ສຸກ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-lang">ສາຍພາສາ</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ວິຊາທີ 16 -->
+                    <div class="course-card" data-cat="lang" data-sub="english" data-name="ພາສາອັງກິດ-ລະດັບສູງ" data-price="1650000" data-time="18:00-19:30" data-days="ຈັນ-ພຸດ-ສຸກ" data-year="2026-2027">
+                        <div class="course-info">
+                            <div class="course-top">
+                                <span class="c-title">ພາສາອັງກິດ-ລະດັບສູງ</span>
+                                <div class="c-top-right">
+                                    <span class="c-level">ລະດັບສູງ</span>
+                                    <span class="check-box-icon"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="c-price">ຄ່າຮຽນ 1,650,000 ກີບ/ເທີມ</div>
+                            <div class="c-details-grid">
+                                <span><i class="fa-regular fa-clock"></i> ເວລາຮຽນ:18:00 - 19:30ໂມງ</span>
+                                
+                            </div>
+                             <div class="c-details-grid">
+                                
+                                <span><i class="fa-regular fa-calendar"></i>ຮຽນ: ຈັນ-ພຸດ-ສຸກ</span>
+                            </div>
+                            <div class="c-tags">
+                                <span class="tag-lang">ສາຍພາສາ</span>
+                                <span class="tag-year">2026-2027</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+      <!-- 1. ສ່ວນສະແດງລາຍວິຊາທີ່ເລືອກ -->
+        <div class="section-block-title" style="margin-top: 25px;">
+            <div class="s-icon-box"><i class="fa-solid fa-book-bookmark"></i></div>
+            <span>ວິຊາເລືອກຮຽນ ແລະ ຊຳລະຄ່າເທີມ</span>
+        </div>
+
+        <div class="summary-section">
+            <div id="selectedCoursesListContainer">
+                <p style="color: #64748b; font-size: 13px; text-align: center; padding: 10px;">ຍັງບໍ່ໄດ້ເລືອກວິຊາຮຽນ</p>
+            </div>
+        </div>
+
+        <!-- 2. ສ່ວນສະຫຼຸບຄ່າຮຽນ -->
+        <div class="section-block-title" style="margin-top: 25px;">
+      
+        </div>
+                <div class="button-group-bottom">
+                    <button type="button" class="btn-back-step" id="backToStep1Bottom">
+                        <i class="fa-solid fa-arrow-left"></i> ກັບຄືນ
+                    </button>
+                    <button class="btn-save" id="finalSubmitBtn">ບັນທຶກຂໍ້ມູນ
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
+        </form>
+    </div>
+    <!-- Modal ສຳລັບຊຳລະຄ່າລົງທະບຽນ -->
+<div id="qrModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-wallet"></i> ຊຳລະຄ່າລົງທະບຽນ</h3>
+            <button type="button" class="close-btn" onclick="closeQRModal()">&times;</button>
+        </div>
+        
+        <!-- ກ່ອງສີຂາວ ທາງໃນ Modal (ຄືກັບຮູບທີ 2) -->
+        <div class="modal-white-box">
+            <!-- ສ່ວນທີ 1: ສະແດງ QR Code ແລະ ລາຍລະອຽດບັນຊີ -->
+            <div id="qrSection">
+                <div class="qr-image-box">
+                    <p class="qr-title-text">ໂອນເງິນຂ້າມທະນາຄານຜ່ານ LAPNet LAO QR</p>
+                    <img src="Logo/QR Code.png" alt="QR Code" class="qr-img">
+                </div>
+                <div class="account-details">
+                    <p><strong>ℹ️ ລາຍລະອຽດບັນຊີ:</strong></p>
+                    <p>ທະນາຄານ: BCEL (ຫໍພະຕໍ່)</p>
+                    <p>ຊື່ບັນຊີ: YERMOUA KERMOUA MR</p>
+                    <p>ເລກບັນຊີ: <span id="accountNum">052-12-00-01901348-001</span> </p>
+                </div>
+
+                <button type="button" class="confirm-pay-btn" onclick="saveQRCode()">ບັນທຶກຮູບ QR Code</button>
+            </div>
+<!-- ສ່ວນທີ 2: ຟອມສົ່ງສະລິບໂອນເງິນ (ສະແດງຂຶ້ນມາຫຼັງຈາກບັນທຶກ QR ແລ້ວ) -->
+<div id="uploadSlipSection" style="display: none;">
+    <div class="slip-upload-box">
+        <!-- ຫົວຂໍ້ຟອມ -->
+        <p class="qr-title-text slip-title-style">
+            <span class="slip-title-span">☰</span> ຮູບສະລິບໂອນເງິນ *
+        </p>
+        
+        <!-- ກ່ອງ Dropzone -->
+        <label for="slipFile" class="slip-label-style">
+            <div id="dropZone" class="upload-dropzone slip-dropzone-style">
+                <!-- ຈຸດສະແດງເນື້ອໃນ ແລະ ຮູບ Preview -->
+                <div id="dropzoneContent">
+                    <i class="fas fa-file-invoice-dollar slip-icon-style"></i>
+                    <p class="slip-main-text">ຄລິກ ຫຼື ລາກຮູບສະລິບໃສ່ນີ້</p>
+                    <p class="slip-sub-text">ຮອງຮັບ PNG, JPG, JPEG</p>
+                </div>
+            </div>
+            <input type="file" id="slipFile" accept="image/*" style="display: none;">
+        </label>
+    </div>
+
+    <!-- ປຸ່ມ "ໂອນເງິນແລ້ວ" -->
+<button type="button" id="submitSlipBtn" class="confirm-pay-btn" onclick="submitSlip()">ສົ່ງຮູບສະລິບໂອນເງິນ</button>
+</div>
+
+<!-- Custom Loading & Success Modal -->
+<div id="customLoadingModal" class="custom-loading-overlay">
+    <div class="custom-loading-box">
+        <div id="loadingIconContainer" style="margin-bottom: 15px;">
+            <div class="spinner-circle"></div>
+        </div>
+        <p id="loadingText" class="loading-text-style">ກຳລັງບັນທຶກ<span class="dots"></span></p>
+    </div>
+</div>
+<script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
+<script src="script.js"></script>
+</body>
+</html>
