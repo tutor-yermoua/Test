@@ -1053,7 +1053,7 @@ select {
 .modal-white-box {
     background-color: #ffffff;
     border-radius: 10px;
-    padding: 15px;
+    padding: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     height: auto;
     min-height: 420px; /* ຄວາມສູງຂັ້ນຕ່ຳໃຫ້ພໍດີກັບໜ້າ QR Code */
@@ -1065,13 +1065,18 @@ select {
 /* ສ່ວນອັບໂຫຼດສະລິບ */
 .upload-dropzone {
     border: 2px dashed #cbd5e1;
-    padding: 20px 25px;
+    padding: 10px 25px;
     min-height: 345px;
     text-align: center;
     border-radius: 6px;
     margin-bottom: 10px;
     background-color: #f8fafc;
     cursor: pointer;
+    /* 👈 ໃຫ້ເພີ່ມ 3 ສາຍນີ້ລົງໄປເພື່ອຈັດໃຫ້ເນື້ອຫາຢູ່ເຄິ່ງກາງພໍດີ */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 /* --- CSS ສຳລັບສ່ວນອັບໂຫຼດສະລິບ --- */
