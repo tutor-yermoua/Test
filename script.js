@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="selected-course-title">${course.name}</div>
                 <div class="selected-course-price">ຄ່າຮຽນ ${course.price.toLocaleString()}ກີບ/ເທີມ</div>
                 
-                <div style="margin: 6px 0;">
+                <div style="margin-top: -8px; margin-bottom: 2px;font-size: 13px;">
                     ${course.paymentStatus || ''}
                 </div>
 
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
         payActionDiv.style.marginTop = '12px';
         payActionDiv.innerHTML = `
             <button type="button" class="btn-pay-course" onclick="payCourse()" style="width: 100%; padding: 10px; background-color: ${allPaid ? '#16a34a' : '#2563eb'}; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
-                <i class="fa-solid fa-credit-card" style="margin-right: 5px;"></i> ${allPaid ? 'ໂອນເງິນແລ້ວ' : 'ຊຳລະຄ່າເທີມ (' + totalSum.toLocaleString() + ' ກີບ)'}
+                <i class="fa-solid fa-credit-card" style="margin-right: 5px;"></i> ${allPaid ? 'ໂອນເງິນແລ້ວ' : 'ຊຳລະຄ່າເທີມ'}
             </button>
         `;
         container.appendChild(payActionDiv);
@@ -453,7 +453,7 @@ function processSlipVerification(file) {
     submitBtn.style.backgroundColor = '#94a3b8';
     submitBtn.style.cursor = 'not-allowed';
     submitBtn.disabled = true;
-    submitBtn.innerHTML = `ກຳລັງອ່ານສະລິບດ້ວຍ AI<span class="dots"><span>.</span><span>.</span><span>.</span></span>`;
+    submitBtn.innerHTML = `ກຳລັງກວດສອບ<span class="dots"><span>.</span><span>.</span><span>.</span></span>`;
 
     // 1. ດຶງຄ່າເທີມຈາກວິຊາທີ່ຜູ້ໃຊ້ເລືອກຢູ່ປັດຈຸບັນແບບ Dynamic
     let coursePrice = 0;
