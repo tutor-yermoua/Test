@@ -1061,7 +1061,6 @@ select {
     flex-direction: column;
     justify-content: space-between; /* ดันຫົວຂໍ້ຂຶ້ນເທິງ ແລະ ดັນປຸ່ມລົງລຸ່ມສຸດພໍດີ */
 }
-
 /* ສ່ວນອັບໂຫຼດສະລິບ */
 .upload-dropzone {
     border: 2px dashed #cbd5e1;

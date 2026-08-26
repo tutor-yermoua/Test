@@ -285,7 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(payActionDiv);
     };
 
-    // 4. ລະບົບສົ່ງຂໍ້ມູນໄປ Google Sheets
     const finalSubmitBtn = document.getElementById('finalSubmitBtn'); 
     if (finalSubmitBtn) {
         finalSubmitBtn.addEventListener('click', () => {
@@ -294,6 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // 1. ດຶງຂໍ້ມູນທົ່ວໄປຈາກຟອມ
             const studentName = document.querySelector('input[name="fullname"]')?.value || 'ບໍ່ໄດ້ລະບຸ';
             const school = document.querySelector('input[name="school"]')?.value || '';
             const provinceText = document.getElementById('provinceSelectedText')?.textContent || '';
@@ -303,11 +303,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const whatsapp = document.querySelector('input[name="whatsapp"]')?.value || '';
             const facebook = document.querySelector('input[name="facebook"]')?.value || '';
             const courseName = window.selectedCourses.map(c => c.name).join(', ');
-            const totalCoursePrice = window.selectedCourses.reduce((sum, c) => sum + c.price, 0);
-            const coursePriceFormatted = totalCoursePrice.toLocaleString() + ' ກີບ';
+            
+            // 2. ຄ່າເທີມລວມທັງໝົດແບບ Dynamic
+            const totalCoursePrice = window.selectedCourses.reduce((sum, c) => sum + (c.price || 0), 0);
+
+            // 3. 🟢 ດຶງ "ຈຳນວນເງິນໃນສະລິບ" ທີ່ອ່ານໄດ້ຈາກ OCR ມາໃຊ້
+            let slipPaidAmount = 0;
+            
+            if (typeof extractedMoney !== 'undefined' && extractedMoney !== null && extractedMoney !== "") {
+                slipPaidAmount = parseFloat(extractedMoney.replace(/,/g, '')) || 0;
+            } else if (typeof detectedAmount !== 'undefined' && detectedAmount !== null) {
+                slipPaidAmount = detectedAmount; 
+            } else if (window.paidAmountFromSlip !== undefined) {
+                slipPaidAmount = window.paidAmountFromSlip; 
+            } else {
+                slipPaidAmount = totalCoursePrice;
+            }
+
+            if (isNaN(slipPaidAmount) || slipPaidAmount <= 0) {
+                slipPaidAmount = totalCoursePrice;
+            }
+
+            // 4. 🟢 ຄິດໄລ່ "ເງິນທີ່ຍັງເຫຼືອ (ຄ້າງຈ່າຍ)" = ຄ່າເທີມລວມ - ເງິນໃນສະລິບ
+            let remainingAmount = totalCoursePrice - slipPaidAmount;
+            if (remainingAmount < 0) remainingAmount = 0;
+
             const noteInput = document.querySelector('input[name="note"]');
             const note = noteInput ? noteInput.value : '-';
 
+            // 5. ຫໍ່ຂໍ້ມູນສົ່ງໄປ Google Sheets (ໃຊ້ຄ່າທີ່ຄິດໄລ່ຈິງຈາກສະລິບ)
             const formData = {
                 studentName: studentName,
                 school: school,
@@ -315,29 +339,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 district: district,
                 whatsapp: whatsapp,
                 facebook: facebook,
-                courseName: courseName,          
-                coursePrice: coursePriceFormatted, 
-                note: note                     
+                courseName: courseName,           
+                coursePrice: totalCoursePrice.toLocaleString() + ' ກີບ', 
+                paidAmount: slipPaidAmount.toLocaleString() + ' ກີບ',         // ເງິນທີ່ຈ່າຍແລ້ວ (ຕາມສະລິບ)
+                remainingAmount: remainingAmount.toLocaleString() + ' ກີບ',   // ເງິນທີ່ຍັງເຫຼືອ (ຄ້າງຈ່າຍ)
+                note: note                    
             };
 
-            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzUbXASpDaA8Gw7iBbGHPpIxbhv_g-JfJjklIKuDEJ0A5V1IES5seA0UHCkp3aPe5A-/exec";
+            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxbUjtd5M4c8aS46YXYfKhlFSIqDfXX4OEb-z8Cd2jcJFhCsDXJE5K4F_mWpVFzB6WD/exec";
 
+            // ສະແດງ Pop-up ກຳລັງບັນທຶກ
             const loadingOverlay = document.createElement('div');
             loadingOverlay.className = 'form-overlay-box';
             loadingOverlay.id = 'formProcessingOverlay';
             loadingOverlay.innerHTML = `
                 <div class="center-spinner"></div>
-                <div style="color: #334155; font-size: 15px; font-weight: 500; margin-top: 10px;">ກຳລັງບັນທຶກຂໍ້ມູນ</div>
+                <div style="color: #334155; font-size: 15px; font-weight: 500; margin-top: 10px;">ກຳລັງບັນທຶກຂໍ້ມູນ...</div>
             `;
             document.body.appendChild(loadingOverlay);
 
+            // ສົ່ງຂໍ້ມູນໄປ Google Sheets
             fetch(WEB_APP_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             });
-
             setTimeout(() => {
                 if (loadingOverlay) {
                     loadingOverlay.innerHTML = `
@@ -458,7 +485,7 @@ function processSlipVerification(file) {
     // 1. ດຶງຄ່າເທີມຈາກວິຊາທີ່ຜູ້ໃຊ້ເລືອກຢູ່ປັດຈຸບັນແບບ Dynamic
     let coursePrice = 0;
     if (window.selectedCourses && window.selectedCourses.length > 0) {
-        coursePrice = window.selectedCourses[0].price; // ໄດ້ລາຄາວິຊານັ້ນໆ ຕາມທີ່userກົດເລືອກ
+        coursePrice = window.selectedCourses[0].price; 
     }
 
     // 2. ນຳໃຊ້ Tesseract.js ອ່ານຮູບສະລິບ (ຮອງຮັບ ພາສາອັງກິດ, ລາວ, ໄທ)
@@ -483,7 +510,11 @@ function processSlipVerification(file) {
             return;
         }
 
-        let transferredAmount = parseFloat(amountStr.replace(/,/g, ''));
+        // 🟢 ບັນທຶກຄ່າເງິນທີ່ອ່ານໄດ້ລົງໃນຕົວແປ global ທີ່ເຮົາກຽມໄວ້
+        extractedMoney = amountStr;
+        window.paidAmountFromSlip = parseFloat(amountStr.replace(/,/g, '')) || 0;
+
+        let transferredAmount = window.paidAmountFromSlip;
         let remainingAmount = coursePrice - transferredAmount;
 
         // ກໍລະນີຈ່າຍເກີນຄ່າເທີມ
@@ -523,7 +554,7 @@ function processSlipVerification(file) {
     });
 }
 
-// ຟັງຊັນຊ່ວຍດึงຕົວເລກຈຳນວນເງິນຈາກຂໍ້ຄວາມ OCR
+// ຟັງຊັນຊ່ວຍດຶງຕົວເລກຈຳນວນເງິນຈາກຂໍ້ຄວາມ OCR
 function parseAmountFromOCR(text) {
     let cleanText = text.replace(/\s+/g, ' ');
     let matches = cleanText.match(/\b\d{1,3}(?:,\d{3})+(?:\.\d{2})?\b/g);
@@ -539,11 +570,9 @@ function showOverpaymentAlert() {
     let existingAlert = document.getElementById('overpaymentPopup');
     if (existingAlert) existingAlert.remove();
 
-    // ຊອກຫາສ່ວນຂອງກ່ອງສະລິບ ຫຼື DropZone ເພື່ອເອົາມາເປັນຈຸດອ້າງອີງຕຳແໜ່ງ
     const dropZone = document.getElementById('dropZone') || document.getElementById('uploadSlipSection');
     if (!dropZone) return;
 
-    // ໃຫ້ DropZone ຕັ້ງຄ່າເປັນ relative ເພື່ອໃຫ້ກ່ອງແຈ້ງເຕືອນ (absolute) ຈັດຕຳແໜ່ງຢູ່ພາຍໃນໄດ້
     dropZone.style.position = 'relative';
 
     const alertBox = document.createElement('div');
@@ -574,7 +603,6 @@ function showOverpaymentAlert() {
 
     dropZone.appendChild(alertBox);
 
-    // ໃຫ້ແຈ້ງເຕືອນເຊື່ອງຫາຍໄປเองຫຼັງຈາກ 4 ວິນາທີ (ຫຼືສາມາດກົດປິດ/ອັບໂຫຼດໃຫມ່ໄດ້)
     setTimeout(() => {
         if (alertBox) {
             alertBox.style.opacity = '0';
