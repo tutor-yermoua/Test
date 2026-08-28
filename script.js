@@ -71,11 +71,97 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+// =============================================================
+    // 1. ລະບົບກວດສອບ (Validation) ເວລາກົດປຸ່ມ "ຕໍ່ໄປ"
+    // =============================================================
     if (registrationForm) {
         registrationForm.addEventListener('submit', function(e) {
             e.preventDefault();
+
+            let isValid = true;
+
+            // ເຊັກ Input ທົ່ວໄປ (ຊື່, ໂຮງຮຽນ, WhatsApp, Facebook)
+            const allInputs = document.querySelectorAll('input[type="text"], input[type="tel"]');
+            
+            allInputs.forEach(input => {
+                const groupContainer = input.closest('.input-group-box');
+
+                if (!input.value.trim()) {
+                    if (groupContainer) groupContainer.classList.add('input-error-border');
+                    isValid = false;
+                } else {
+                    if (groupContainer) groupContainer.classList.remove('input-error-border');
+                }
+            });
+
+            // ເຊັກຊ່ອງ ແຂວງ ແລະ ເມືອງ
+            const dropdownBoxes = document.querySelectorAll('.input-group-box.always-show');
+            
+            dropdownBoxes.forEach(box => {
+                const selectedTextSpan = box.querySelector('span[id$="SelectedText"]');
+                if (selectedTextSpan) {
+                    const textValue = selectedTextSpan.textContent.trim();
+                    if (textValue.includes('ກະລຸນາເລືອກ')) {
+                        box.classList.add('input-error-border');
+                        isValid = false;
+                    } else {
+                        box.classList.remove('input-error-border');
+                    }
+                }
+            });
+
+            // ຖ້າຂໍ້ມູນຍັງບໍ່ຄົບ ໃຫ້ຢຸດການສົ່ງຟອມ (ຂອບຈະແດງໝົດທຸກຊ່ອງທີ່ຫວ່າງ)
+            if (!isValid) {
+                return; 
+            }
+
+            // ຖ້າຜ່ານໝົດແລ້ວ ໄປໜ້າຖັດໄປ
             if (page1) page1.style.display = 'none';
             if (step2Container) step2Container.style.display = 'block';
+        });
+    }
+
+    // =============================================================
+    // 2. ເວລາກົດຄລິກ (Focus) ໃຫ້ລຶບຂອບແດງທັງໝົດ ແລ້ວຊ່ອງທີ່ກົດຈະເປັນສີຟ້າ
+    // =============================================================
+    const allTextInputs = document.querySelectorAll('input[type="text"], input[type="tel"]');
+    
+    allTextInputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            // ລຶບຂອບສີແດງອອກຈາກທຸກໆກ່ອງ (ໃຫ້ກັບຄືນເປັນສີເທົາປົກກະຕິ)
+            const allGroups = document.querySelectorAll('.input-group-box');
+            allGroups.forEach(group => {
+                group.classList.remove('input-error-border');
+            });
+        });
+
+        // ເວລາມີການພິມຂໍ້ມູນລົງໄປ ກໍລຶບຂອບສີແດງອອກເຊັ່ນກັນ
+        input.addEventListener('input', () => {
+            const groupContainer = input.closest('.input-group-box');
+            if (input.value.trim() !== '' && groupContainer) {
+                groupContainer.classList.remove('input-error-border');
+            }
+        });
+    });
+
+    // =============================================================
+    // 3. ເວລາມີການກົດເລືອກ ແຂວງ ຫຼື ເມືອງ ໃຫ້ລຶບຂອບສີແດງອອກທັງໝົດເຊັ່ນກັນ
+    // =============================================================
+    if (typeof provinceListEl !== 'undefined' && provinceListEl) {
+        provinceListEl.querySelectorAll('li').forEach(li => {
+            li.addEventListener('click', () => {
+                const allGroups = document.querySelectorAll('.input-group-box');
+                allGroups.forEach(g => g.classList.remove('input-error-border'));
+            });
+        });
+    }
+
+    if (typeof districtListEl !== 'undefined' && districtListEl) {
+        districtListEl.addEventListener('click', (e) => {
+            if (e.target.tagName === 'LI') {
+                const allGroups = document.querySelectorAll('.input-group-box');
+                allGroups.forEach(g => g.classList.remove('input-error-border'));
+            }
         });
     }
 
@@ -383,6 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2000);
         });
     }
+    
 });
 
 window.onclick = function(event) {
@@ -471,8 +558,7 @@ function saveQRCode() {
 
     }, 2500);
 }
-
-// 🚀 ຟັງຊັນອ່ານສະລິບແບບ Dynamic 100% ຜ່ານ Tesseract.js
+// 🚀 ຟັງຊັນອ່ານສະລິບແບບ Direct OCR ຜ່ານ Tesseract.js (ເນັ້ນຈັບ LAK ແລະ ຕົວເລກ)
 function processSlipVerification(file) {
     const submitBtn = document.getElementById('submitSlipBtn') || document.querySelector('.confirm-pay-btn');
     if (!submitBtn) return;
@@ -482,24 +568,40 @@ function processSlipVerification(file) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = `ກຳລັງກວດສອບ<span class="dots"><span>.</span><span>.</span><span>.</span></span>`;
 
-    // 1. ດຶງຄ່າເທີມຈາກວິຊາທີ່ຜູ້ໃຊ້ເລືອກຢູ່ປັດຈຸບັນແບບ Dynamic
+    // 1. ดຶງຄ່າເທີມຈາກວິຊາທີ່ຜູ້ໃຊ້ເລືອກຢູ່ປັດຈຸບັນ
     let coursePrice = 0;
     if (window.selectedCourses && window.selectedCourses.length > 0) {
         coursePrice = window.selectedCourses[0].price; 
     }
 
-    // 2. ນຳໃຊ້ Tesseract.js ອ່ານຮູບສະລິບ (ຮອງຮັບ ພາສາອັງກິດ, ລາວ, ໄທ)
+    // 2. 🌟 ປ່ຽນມາໃຊ້ສະເພາະ 'eng' ເພື່ອໃຫ້ມັນອ່ານຕົວເລກ ແລະ LAK ໄດ້ຊັດເຈນທີ່ສຸດ (ບໍ່ໃຫ້ພາສາລາວກວນ)
     Tesseract.recognize(
         file,
-        'eng+lao+tha',
+        'eng',
         { 
             logger: m => console.log(m.status),
             tessedit_ocr_engine_mode: 1 
         }
     ).then(({ data: { text } }) => {
-        console.log("OCR Result:\n", text);
+        console.log("OCR Result (Clean):\n", text);
 
-        let amountStr = parseAmountFromOCR(text);
+        // 🌟 ຟັງຊັນຍ່ອຍ: ຊອກຫາສະເພາະຕົວເລກທີ່ມີ , ແລະ ຕາມຫຼັງດ້ວຍ LAK
+        let amountStr = null;
+        
+        // Regular Expression ຊອກຫາຮູບແບບ ຕົວເລກທີ່ມີຈຸດເຊັ່ນ 484,000 ຕາມດ້ວຍ LAK
+        const regex = /([\d,]+\.\d{2}\s*LAK|[\d,]+\s*LAK)/gi;
+        const matches = text.match(regex);
+
+        if (matches && matches.length > 0) {
+            // ເອົາຄ່າທຳອິດທີ່ຈັບໄດ້ ແລ້ວຕັດຄຳວ່າ LAK ອອກ ເຫຼືອແຕ່ຕົວເລກ
+            let rawMatch = matches[0];
+            amountStr = rawMatch.replace(/LAK/gi, '').trim();
+        } else {
+            // ຖ້າຫາແບບມີ LAK ບໍ່ເຈັບ ໃຫ້ລອງໃຊ້ Function ເກົ່າທີ່ນ້ອງມີ (parseAmountFromOCR) ຊ່ວຍສຳຮອງ
+            if (typeof parseAmountFromOCR === 'function') {
+                amountStr = parseAmountFromOCR(text);
+            }
+        }
 
         if (!amountStr) {
             alert("⚠️ ບໍ່ພົບຈຳນວນເງິນໃນສະລິບ, ກະລຸນາເລືອກຮູບສະລິບໃໝ່ທີ່ຊັດເຈນກວ່ານີ້");
@@ -510,7 +612,7 @@ function processSlipVerification(file) {
             return;
         }
 
-        // 🟢 ບັນທຶກຄ່າເງິນທີ່ອ່ານໄດ້ລົງໃນຕົວແປ global ທີ່ເຮົາກຽມໄວ້
+        // 🟢 ບັນທຶກຄ່າເງິນທີ່ອ່ານໄດ້
         extractedMoney = amountStr;
         window.paidAmountFromSlip = parseFloat(amountStr.replace(/,/g, '')) || 0;
 
@@ -553,7 +655,6 @@ function processSlipVerification(file) {
         submitBtn.innerHTML = `ສົ່ງຮູບສະລິບໂອນເງິນ`;
     });
 }
-
 // ຟັງຊັນຊ່ວຍດຶງຕົວເລກຈຳນວນເງິນຈາກຂໍ້ຄວາມ OCR
 function parseAmountFromOCR(text) {
     let cleanText = text.replace(/\s+/g, ' ');
@@ -690,4 +791,108 @@ if (dropZone && slipFile) {
             processSlipVerification(files[0]); 
         }
     }, false);
+}
+
+// 1. ຟັງຊັນຫຍໍ້ຮູບສຳລັບມືຖື
+function compressImageForOCR(file, callback) {
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const img = new Image();
+        img.onload = function () {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 1000; // 📉 ຕັດຂະໜາດລົງມາໃຫ້ມືຖືປະມວນຜົນສະບາຍ
+            let width = img.width;
+            let height = img.height;
+
+            if (width > MAX_WIDTH) {
+                height = Math.round((height *= MAX_WIDTH / width));
+                width = MAX_WIDTH;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            canvas.toBlob(function (blob) {
+                const resizedFile = new File([blob], file.name, {
+                    type: 'image/jpeg',
+                    lastModified: Date.now()
+                });
+                callback(resizedFile);
+            }, 'image/jpeg', 0.8);
+        };
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+// 2. ເອົາມາຄອບ Event ຕອນຜູ້ໃຊ້ອັບໂຫຼດຮູບສະລິບ (ສົ່ງໄປ Backend)
+const slipInput = document.getElementById('slipInputFile'); 
+if (slipInput) {
+    slipInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const submitBtn = document.getElementById('submitSlipBtn') || document.querySelector('.confirm-pay-btn');
+        if (submitBtn) {
+            submitBtn.innerHTML = `ກຳລັງກວດສອບ ...`;
+            submitBtn.style.backgroundColor = '#94a3b8';
+            submitBtn.disabled = true;
+        }
+
+        const formData = new FormData();
+        formData.append('slipImage', file);
+
+        // ສ่งໄຟລ໌ຮູບໄປປະມວນຜົນທີ່ Backend
+        fetch('/api/verify-slip', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                if (submitBtn) {
+                    submitBtn.style.backgroundColor = '#781134';
+                    submitBtn.style.cursor = 'pointer';
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `ໂອນເງິນແລ້ວ ✓ (${data.amount})`;
+                }
+                
+                // ເກັບຄ່າຈຳນວນເງິນໄວ້
+                window.verifiedAmount = data.amount;
+
+                // ເມື່ອກົດປຸ່ມແລ້ວ ໃຫ້ປິດ Modal ແລ້ວອັບເດດໜ້າທຳອິດ
+                if (submitBtn) {
+                    submitBtn.onclick = function() {
+                        const qrModal = document.getElementById('qrModal');
+                        if (qrModal) qrModal.style.display = 'none';
+                        
+                        // ຟັງຊັນອັບເດດສະແດງຜົນໜ້າຫຼັກຕາມທີ່ອອກແບບໄວ້
+                        if (typeof updateMainPageDisplay === 'function') {
+                            updateMainPageDisplay(data.amount);
+                        }
+                    };
+                }
+            } else {
+                alert(data.message || "ບໍ່ພົບຈຳນວນເງິນໃນສະລິບ");
+                if (submitBtn) {
+                    submitBtn.style.backgroundColor = '#781134';
+                    submitBtn.style.cursor = 'pointer';
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `ສົ່ງຮູບສະລິບໂອນເງິນ`;
+                }
+            }
+        })
+        .catch(err => {
+            console.error("Server Error:", err);
+            alert("ເກີດຂໍ້ຜິດພາດໃນການເຊື່ອມຕໍ່ເຊີບເວີ");
+            if (submitBtn) {
+                submitBtn.style.backgroundColor = '#781134';
+                submitBtn.style.cursor = 'pointer';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `ສົ່ງຮູບສະລິບໂອນເງິນ`;
+            }
+        });
+    });
 }

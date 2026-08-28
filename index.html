@@ -32,7 +32,7 @@
                     <span class="floating-label">ຊື່ ແລະ ນາມສະກຸນ</span>
                     <div class="input-field">
                         <i class="fa-solid fa-user icon"></i>
-                        <input type="text" name="fullname" placeholder="ຊື່ ແລະ ນາມສະກຸນ" onfocus="this.placeholder='ປ້ອນຊື່ ແລະ ນາມສະກຸນ'" onblur="this.placeholder='ຊື່ ແລະ ນາມສະກຸນ'" required>
+                        <input type="text" name="fullname" placeholder="ຊື່ ແລະ ນາມສະກຸນ" onfocus="this.placeholder='ປ້ອນຊື່ ແລະ ນາມສະກຸນ'" onblur="this.placeholder='ຊື່ ແລະ ນາມສະກຸນ'">
                     </div>
                 </div>
 
@@ -41,7 +41,7 @@
                     <span class="floating-label">ໂຮງຮຽນ</span>
                     <div class="input-field">
                         <i class="fa-solid fa-school icon"></i>
-                        <input type="text" name="school" placeholder="ໂຮງຮຽນ" onfocus="this.placeholder='ປ້ອນຊື່ໂຮງຮຽນ'" onblur="this.placeholder='ໂຮງຮຽນ'" required>
+                        <input type="text" name="school" placeholder="ໂຮງຮຽນ" onfocus="this.placeholder='ປ້ອນຊື່ໂຮງຮຽນ'" onblur="this.placeholder='ໂຮງຮຽນ'">
                     </div>
                 </div>
 
@@ -83,16 +83,18 @@
                     <span class="floating-label">ເບີ WhatsApp</span>
                     <div class="input-field">
                         <i class="fa-brands fa-whatsapp icon"></i>
-                        <input type="text" name="whatsapp" placeholder="ເບີ WhatsApp" onfocus="this.placeholder='ປ້ອນເບີ WhatsApp'" onblur="this.placeholder='ເບີ WhatsApp'" required>
+                        <input type="tel" name="whatsapp" maxlength="11" placeholder="ເບີ WhatsApp" 
+                               onfocus="this.placeholder='ປ້ອນເບີ WhatsApp'" 
+                               onblur="this.placeholder='ເບີ WhatsApp'"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);">
                     </div>
                 </div>
-
                 <!-- Facebook: ເຊື່ອງປ້າຍຊື່ໄວ້, ສະແດງຕອນກົດ -->
                 <div class="input-group-box">
                     <span class="floating-label">Facebook</span>
                     <div class="input-field">
                         <i class="fa-brands fa-facebook icon"></i>
-                        <input type="text" name="facebook" placeholder="ຊື່ Facebook" onfocus="this.placeholder='ປ້ອນຊື່ Facebook'" onblur="this.placeholder='ຊື່ Facebook'" required>
+                        <input type="text" name="facebook" placeholder="ຊື່ Facebook" onfocus="this.placeholder='ປ້ອນຊື່ Facebook'" onblur="this.placeholder='ຊື່ Facebook'">
                     </div>
                 </div>
 
